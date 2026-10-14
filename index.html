@@ -244,7 +244,7 @@ section + section{border-top:1px solid var(--hair)}
 .notehead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:9.5px;letter-spacing:.22em;color:var(--faint);text-transform:uppercase;border-bottom:1px solid var(--hair);padding-bottom:8px;margin-bottom:16px}
 
 /* contact */
-.contactgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(22px,4vw,52px);align-items:start}
+.contactgrid{display:grid;grid-template-columns:1fr;gap:clamp(22px,4vw,52px);align-items:start}
 @media(max-width:820px){.contactgrid{grid-template-columns:1fr}}
 form .fr{margin-bottom:12px}
 form label{display:block;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;margin-bottom:5px}
@@ -255,12 +255,15 @@ form textarea{min-height:110px;resize:vertical}
 .btn:hover{background:var(--paper);color:var(--ink)}
 .btn.ghost{background:var(--paper);color:var(--ink)}
 .btn.ghost:hover{background:var(--ink);color:var(--paper)}
-.linklist{border:1.5px solid var(--ink);background:var(--card)}
-.linklist a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--hair);border-left:0;border-right:0;border-top:0;font-size:12px;position:relative}
+.linklist{border:0;background:none;border-top:1.5px solid var(--ink)}
+.linklist a{display:flex;align-items:baseline;gap:10px;padding:8px 2px;border-bottom:1px dashed var(--hair);font-size:12px;position:relative}
 .linklist a:last-child{border-bottom:0}
-.linklist a:hover{background:var(--ink);color:var(--paper)}
-.linklist a .k{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
-.linklist a:hover .k{color:var(--paper)}
+.linklist a:hover{background:none;color:inherit}
+.linklist a .k{order:-1;flex:1 1 auto;display:flex;align-items:baseline;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+.linklist a .k::after{content:"";flex:1;min-width:24px;border-bottom:1px dotted var(--faint);margin:0 10px;transform:translateY(-3px)}
+.linklist a span:first-child{font-family:var(--mono);font-size:11.5px;text-align:right;color:var(--ink2)}
+.linklist a:hover span:first-child{color:var(--red);text-decoration:underline}
+.linklist a:hover .k{color:var(--red)}
 .statbox{border:1.5px solid var(--ink);margin-top:18px;background:var(--card);padding:16px 18px}
 .statbox .r{display:flex;justify-content:space-between;border-bottom:1px dashed var(--hair);padding:5px 0;font-size:11.5px;gap:10px}
 .statbox .r:last-child{border-bottom:0}
@@ -681,46 +684,12 @@ body.editing .ex .openhint{display:none}
   </div>
   <div class="contactgrid">
     <div class="reveal">
-      <form id="leadform" method="POST">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_subject" value="New lead — criminal record file">
-        <input type="hidden" name="_next" id="f-next" value="">
-        <div class="fr"><label for="f-name">Your name</label><input id="f-name" name="name" type="text" placeholder="Agent / studio / your name" required></div>
-        <div class="fr"><label for="f-mail">Your email</label><input id="f-mail" name="email" type="email" placeholder="you@studio.com" required></div>
-        <div class="fr"><label for="f-type">What is this about</label>
-          <select id="f-type" name="type">
-            <option>Brand identity project</option><option>Motion / animation project</option>
-            <option>Illustration commission</option><option>Print / editorial</option>
-            <option>Painting / artwork</option><option>Full-time role</option><option>Something else entirely</option>
-          </select>
-        </div>
-        <div class="fr"><label for="f-budget">Budget band (rough is fine)</label>
-          <select id="f-budget" name="budget">
-            <option>Not sure yet</option><option>Under ₹50k / $600</option><option>₹50k–₹2L / $600–2.5k</option>
-            <option>₹2L–₹8L / $2.5k–10k</option><option>Above that</option>
-          </select>
-        </div>
-        <div class="fr"><label for="f-deadline">Deadline</label>
-          <select id="f-deadline" name="deadline">
-            <option>Flexible</option><option>Under 2 weeks</option><option>2–6 weeks</option><option>1–3 months</option><option>Yesterday (we'll talk)</option>
-          </select>
-        </div>
-        <div class="fr"><label for="f-found">How did you find the subject</label>
-          <select id="f-found" name="found">
-            <option>Referral / witness statement</option><option>Instagram</option><option>Behance / Dribbble</option>
-            <option>LinkedIn</option><option>Search engine</option><option>Found this file somewhere</option>
-          </select>
-        </div>
-        <div class="fr"><label for="f-msg">Your statement</label><textarea id="f-msg" name="message" placeholder="Timeline, budget, and what you actually need. More detail = faster reply." required></textarea></div>
-        <button class="btn" type="submit">Send to subject ▸</button>
-        <p style="font-size:9px;letter-spacing:.18em;color:var(--faint);text-transform:uppercase;margin-top:10px">Delivered straight to the subject's inbox · nothing stored on this page</p>
-      </form>
-      <p id="c-fall" style="font-size:10.5px;color:var(--ink2);margin-top:10px"></p>
-    </div>
-    <div class="reveal">
+      <p id="c-fall" style="font-size:10.5px;color:var(--ink2);margin:0 0 12px"></p>
+
+      <h4 class="vh">Direct lines</h4>
       <div class="linklist" id="c-links"></div>
       <button class="addbtn" data-add="links">+ add link</button>
+      <h4 class="vh" style="margin-top:20px">By the numbers</h4>
       <div class="statbox" id="c-stats"></div>
       <button class="addbtn" data-add="stats">+ add number</button>
     </div>
@@ -782,6 +751,7 @@ body.editing .ex .openhint{display:none}
     <button id="p-reset">Reset all</button>
     <button id="p-exit" style="grid-column:1/-1">Exit officer mode</button>
   </div>
+
 </div>
 
 <div id="index" role="dialog" aria-modal="true" aria-label="Case index">
@@ -1943,6 +1913,8 @@ document.addEventListener('mousemove', function(e){ if(!lbd) return; lbz.x=e.cli
 document.addEventListener('mouseup', function(){ if(lbd){ lbd=null; var lx=$('#lbx'); if(lx) lx.style.cursor= lbz.z>1?'grab':'zoom-in'; } });
 renderMyStamps();
 
+
+
 /* ================= add-item modal ================= */
 var SCHEMAS = {
   exhibits:{label:'New project', fields:[
@@ -2154,12 +2126,6 @@ document.addEventListener('keydown', function(e){
   if(e.target && e.target.isContentEditable) return;
   if(e.key==='r'||e.key==='R') toggleDec();
 });
-$('#leadform').addEventListener('submit', function(ev){
-  var f=ev.target, em=leadEmail();
-  if(!em){ ev.preventDefault(); toast('No email on file yet — officer mode, section 10, ✎ on the Email row'); return; }
-  f.action='https://formsubmit.co/'+encodeURIComponent(em);
-  var nx=$('#f-next'); if(nx) nx.value=window.location.href;
-});
 function leadEmail(){
   var em=CONTENT.contact.email||'';
   for(var i=0;i<(CONTENT.contact.links||[]).length;i++){
@@ -2176,5 +2142,5 @@ renderAll();
 boot();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a49d630adcae8afd',t:'MTc5MTg4NDQ2OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a49d9049aacf86e5',t:'MTc5MTg4NjMyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
