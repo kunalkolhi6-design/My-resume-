@@ -55,6 +55,8 @@ img{max-width:100%}
 #strip nav a.act{color:var(--ink);border-bottom-color:var(--red);font-weight:600}
 #strip .pg{color:var(--faint);white-space:nowrap}
 #strip.lift{box-shadow:0 3px 0 rgba(20,20,20,.14)}
+@media(max-width:640px){#strip .fid{display:none}}
+@media(max-width:430px){#strip .pg{display:none}}
 
 .sheet{max-width:1060px;margin:0 auto;padding:clamp(22px,4.5vw,54px) clamp(16px,4vw,44px) 0;position:relative}
 section{padding:clamp(40px,6vw,78px) 0;position:relative}
@@ -532,14 +534,10 @@ body.editing .ex .openhint{display:none}
   <span id="editflag">● OFFICER MODE — AUTOSAVING</span>
   <button class="back" id="ixbtn" title="Case index (search everything)" style="font-size:10px;letter-spacing:.2em">INDEX</button>
   <nav aria-label="Sections">
-    <a href="#crime-tools">Tools</a>
-    <a href="#charges">Charges</a>
-    <a href="#record">Record</a>
     <a href="#exhibits">Exhibits</a>
-    <a href="#evidence">Evidence</a>
-    <a href="#mo">M.O.</a>
-    <a href="#timeline">Timeline</a>
-    <a href="#contact">Submit lead</a>
+    <a href="#record">Record</a>
+    <a href="#contact">Contact</a>
+    <a href="works.html">Works annex</a>
   </nav>
   <span class="pg">P. <span id="pageno">01</span>/01</span>
 </div>
@@ -599,8 +597,8 @@ body.editing .ex .openhint{display:none}
       <p class="fpcap" data-path="prints.cap">Left to right: right hand thumb to pinky, then left hand · ink on card · 600 dpi</p>
     </div>
     <div class="ld reveal">
-      <h3>Likes</h3><ul id="c-likes"></ul><button class="addbtn" data-add="likes">+ add like</button>
-      <h3>Dislikes</h3><ul id="c-dislikes"></ul><button class="addbtn" data-add="dislikes">+ add dislike</button>
+      <h3 data-path="s_likes.t">Likes</h3><ul id="c-likes"></ul><button class="addbtn" data-add="likes">+ add like</button>
+      <h3 data-path="s_dis.t">Dislikes</h3><ul id="c-dislikes"></ul><button class="addbtn" data-add="dislikes">+ add dislike</button>
     </div>
   </div>
 </section>
@@ -704,7 +702,7 @@ body.editing .ex .openhint{display:none}
       <span class="stamp ink r1 stampin" style="font-size:22px"><span data-path="foot.stamp1">Case file closed</span><small data-path="foot.stamp2">end of document · 10 sections</small></span>
     </div>
     <p class="warnbox" data-path="foot.warn"><b>Warning:</b> if you share this file without permission, he may redesign your logo anyway. Slower. With commentary. Also note: this document is a joke made with love. The agency, the case number and the crimes are made up. The skills are real. He is not actually wanted by anyone. Except recruiters.</p>
-    <p class="made">File <span data-path="meta.fileNo">2026-CR-0451</span> · copy 1 of 1 · compiled <span id="footdate">—</span> · <b>( made with one html file )</b> · press <b>R</b> to declassify</p>
+    <p class="made">File <span data-path="meta.fileNo">2026-CR-0451</span> · <span data-path="foot.copy">copy 1 of 1</span> · compiled <span id="footdate">—</span> · <b data-path="foot.made">( made with one html file )</b> · <span data-path="foot.press">press <b>R</b> to declassify</span></p>
     <button id="officer">· officer access ·</button>
   </div>
 </footer>
@@ -790,6 +788,7 @@ avail:{status:'OPEN FOR WORK', note:'Booking Q1 2027 · replies under 24 hours'}
 seal:{src:''},
 prints:[{src:''},{src:''},{src:''},{src:''},{src:''},{src:''},{src:''},{src:''},{src:''},{src:''}],
 id:{name:'MERCER, ALEX', recordId:'T1389S12309 · CID-4471', pronouns:'HE / HIM', dob:'1996-03-14',
+age:'', lastWhere:'NEW DELHI', k:{},
   occupation:'DESIGNER · ANIMATOR · ILLUSTRATOR · PAINTER', nationality:'INDIAN', mbti:'INFP-T (ALLEGEDLY)',
   lastSeen:'at a workbench', status:'AT LARGE — TAKING WORK',
   note:'Copied from old cards. Mistakes stay. And relax: this is a portfolio. The crimes are metaphors. Mostly.'},
@@ -949,7 +948,10 @@ contact:{email:'hello@alexmercer.design', phone:'00000 00000',
     {label:'vimeo.com/alexmercer', href:'#', key:'Reel'},
     {label:'linkedin.com/in/alexmercer', href:'#', key:'LinkedIn'}],
   stats:[{k:'Projects on file', v:'60+', red:false},{k:'Years of repeat offenses', v:'9', red:false},{k:'Sketchbooks seized', v:'40', red:false},{k:'Countries shipped to', v:'9', red:false},{k:'Deadlines missed', v:'0', red:true}]},
+s_likes:{t:'Likes'}, s_dis:{t:'Dislikes'},
+vlabels:{role:'Role',client:'Client',timeline:'Timeline',tools:'Tools'},
 foot:{stamp1:'Case file closed', stamp2:'end of document · 10 sections',
+  copy:'copy 1 of 1', made:'( made with one html file )', press:'press <b>R</b> to declassify',
   warn:'<b>Warning:</b> if you share this file without permission, he may redesign your logo anyway. Slower. With commentary. Also note: this document is a joke made with love. The agency, the case number and the crimes are made up. The skills are real. He is not actually wanted by anyone. Except recruiters.'}
 };
 
@@ -1102,15 +1104,16 @@ function ageWords(){
 }
 function renderFields(){
   var d=CONTENT.id;
+  var K=CONTENT.id.k||(CONTENT.id.k={});
   $('#c-fields').innerHTML =
-   '<div class="frow"><span class="fk">Name:</span><span class="fv" data-path="id.name">'+esc(d.name)+'</span></div>'+
-   '<div class="frow"><span class="fk">Record ID:</span><span class="fv small" data-path="id.recordId">'+esc(d.recordId)+'</span></div>'+
-   '<div class="frow"><span class="fk">Pronouns:</span><span class="fv" data-path="id.pronouns">'+esc(d.pronouns)+'</span></div>'+
-   '<div class="frow"><span class="fk">Age:</span><span class="fv">'+ageWords()+'</span></div>'+
-   '<div class="frow"><span class="fk">Occupation:</span><span class="fv" data-path="id.occupation">'+esc(d.occupation)+'</span></div>'+
-   '<div class="frow"><span class="fk">Nationality:</span><span class="fv" data-path="id.nationality">'+esc(d.nationality)+'</span></div>'+
-   '<div class="frow"><span class="fk">Mbti:</span><span class="fv" data-path="id.mbti">'+esc(d.mbti)+'</span></div>'+
-   '<div class="frow"><span class="fk">Last seen:</span><span class="fv">NEW DELHI · <span class="rdc" data-r="'+esc(d.lastSeen)+'" data-path="id.lastSeen">'+esc(d.lastSeen)+'</span></span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.name">'+esc(K.name||'Name:')+'</span><span class="fv" data-path="id.name">'+esc(d.name)+'</span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.recordId">'+esc(K.recordId||'Record ID:')+'</span><span class="fv small" data-path="id.recordId">'+esc(d.recordId)+'</span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.pronouns">'+esc(K.pronouns||'Pronouns:')+'</span><span class="fv" data-path="id.pronouns">'+esc(d.pronouns)+'</span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.age">'+esc(K.age||'Age:')+'</span><span class="fv" data-path="id.age">'+esc(d.age||ageWords())+'</span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.occupation">'+esc(K.occupation||'Occupation:')+'</span><span class="fv" data-path="id.occupation">'+esc(d.occupation)+'</span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.nationality">'+esc(K.nationality||'Nationality:')+'</span><span class="fv" data-path="id.nationality">'+esc(d.nationality)+'</span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.mbti">'+esc(K.mbti||'Mbti:')+'</span><span class="fv" data-path="id.mbti">'+esc(d.mbti)+'</span></div>'+
+   '<div class="frow"><span class="fk" data-path="id.k.lastSeen">'+esc(K.lastSeen||'Last seen:')+'</span><span class="fv"><span data-path="id.lastWhere">'+esc(d.lastWhere||'NEW DELHI')+'</span> · <span class="rdc" data-r="'+esc(d.lastSeen)+'" data-path="id.lastSeen">'+esc(d.lastSeen)+'</span></span></div>'+
    '<div class="frow"><span class="fk">Status:</span><span class="fv" style="color:var(--red)" data-path="id.status">'+esc(d.status)+'</span></div>'+
    '<p class="note" data-path="id.note">'+esc(d.note)+'</p>'+
    '<div class="stamprow">'+CONTENT.stamps.map(function(s,i){
@@ -1599,8 +1602,9 @@ function renderViewer(){
      '<button id="vclose" title="Close (Esc)">✕</button></div>';
   h+='<div class="vbody">';
   h+='<div class="vhero">'+artHtml(x.art)+'<span class="ctl"><button data-act="img" data-at="'+P+'" data-field="art" title="Swap hero image">▣</button></span></div>';
-  h+='<div class="vmeta">'+[['role','Role'],['client','Client'],['timeline','Timeline'],['tools','Tools']].map(function(r){
-      return '<div class="row"><span class="k">'+r[1]+'</span><span class="v" data-path="'+P+'.detail.'+r[0]+'">'+esc(d[r[0]]||'—')+'</span></div>';
+  var VL=CONTENT.vlabels||(CONTENT.vlabels={role:'Role',client:'Client',timeline:'Timeline',tools:'Tools'});
+  h+='<div class="vmeta">'+[['role',VL.role],['client',VL.client],['timeline',VL.timeline],['tools',VL.tools]].map(function(r){
+    return '<div class="row"><span class="k" data-path="vlabels.'+r[0]+'">'+esc(r[1])+'</span><span class="v" data-path="'+P+'.detail.'+r[0]+'">'+esc(d[r[0]]||'—')+'</span></div>';
     }).join('')+'</div>';
   h+='<h4 class="vh">The story</h4><div class="vstory">'+
      (d.story||[]).map(function(s,j){return '<p><span data-path="'+P+'.detail.story.'+j+'">'+esc(s)+'</span>'+minidel(P+'.detail.story.'+j)+'</p>'}).join('')+
@@ -2142,5 +2146,5 @@ renderAll();
 boot();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a49d9049aacf86e5',t:'MTc5MTg4NjMyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
